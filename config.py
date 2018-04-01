@@ -107,6 +107,7 @@ def init_keys():
         Key([mod], "k", lazy.layout.down()),
         Key([mod], "f", lazy.window.toggle_floating()),
         Key([mod], "r", lazy.spawncmd()),
+        # yaourt i3lock
         Key([mod, "mod1"], "l", lazy.spawn("i3lock")),
         Key([mod], "u", lazy.spawn(browser_chromium)),
         Key([mod], "x", lazy.spawn(browser_firefox)),
@@ -211,8 +212,14 @@ def init_widgets():
             border=DARK_GREY,
             urgent_border=DARK_BLUE),
         Systray(background=GREY),
-        LaunchBar(progs=[('thunderbird', 'thunderbird',
-                          'launch thunderbird')]),
+        # LaunchBar needs some dependencies, use yaourt to install them
+        LaunchBar(progs=[(  # yaourt thunderbird virtualbox
+            'thunderbird', 'thunderbird', 'launch thunderbird'), (
+                'virtualbox', 'virtualbox',
+                'launch virtualbox'), ('thunar', 'thunar', 'launch thunar'), (
+                    'aria-ng',  # get this from github
+                    'firefox --new-tab ~/Downloads/aria-ng/index.html',
+                    'aria')]),
         TextBox(
             text="◤",
             fontsize=45,
@@ -293,8 +300,9 @@ def startup():
     start the applications when qtile startup
     :return: None
     """
-    execute_once("nm-applet")
-    execute_once("fcitx")
+    execute_once("nm-applet")  # yaourt network manager applet
+    execute_once("fcitx")  # yaourt fcitx
+    execute_once("aria2c --conf-path=/home/dlwxxxdlw/.config/aria2/aria2.conf")
 
 
 if __name__ in ["config", "__main__"]:
@@ -302,14 +310,19 @@ if __name__ in ["config", "__main__"]:
         os.environ["PATH"] = HOME + ".local/bin:{}".format(os.environ["PATH"])
 
     mod = "mod4"
-    browser_chromium = "chromium"
-    browser_firefox = "firefox"
-    terminal = "roxterm"
+    browser_chromium = "chromium"  # yaourt chromium
+    browser_firefox = "firefox"  # yaourt firefox
+    terminal = "roxterm"  # yaourt roxterm
     hostname = socket.gethostname()
-    cursor_warp = True
+    # follow_mouse_focus = True # not sure what this means
+    # never set "cursor_warp" True ,it will make your mouse
+    # back to screen center when you clicked in the virtualbox
+    cursor_warp = False
 
     keys = init_keys()
     mouse = init_mouse()
+    # not sure what this means yet
+    # focus_on_window_activation = "smart"
     groups = init_groups()
     floating_layout = init_floating_layout()
     layouts = [layout.Max()]
