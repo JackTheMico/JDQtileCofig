@@ -9,7 +9,7 @@ from libqtile.command import lazy
 from libqtile.config import Drag, Group, Key, Screen, ScratchPad, DropDown
 from libqtile.widget import (Battery, Clock, CurrentLayout, CurrentLayoutIcon,
                              GroupBox, Notify, Prompt, Sep, Systray, TaskList,
-                             TextBox)
+                             TextBox, LaunchBar)
 
 DEBUG = os.environ.get("DEBUG")
 HOME = os.path.expanduser("~") + "/"
@@ -29,6 +29,7 @@ def window_to_prev_group():
         if qtile.currentWindow and i != 0:
             group = qtile.groups[i - 1].name
             qtile.currentWindow.togroup(group)
+
     return __inner
 
 
@@ -39,6 +40,7 @@ def window_to_next_group():
         if qtile.currentWindow and i != len(qtile.groups):
             group = qtile.groups[i + 1].name
             qtile.currentWindow.togroup(group)
+
     return __inner
 
 
@@ -49,6 +51,7 @@ def window_to_prev_screen():
         if i != 0:
             group = qtile.screens[i - 1].group.name
             qtile.currentWindow.togroup(group)
+
     return __inner
 
 
@@ -59,6 +62,7 @@ def window_to_next_screen():
         if i + 1 != len(qtile.screens):
             group = qtile.screens[i + 1].group.name
             qtile.currentWindow.togroup(group)
+
     return __inner
 
 
@@ -68,6 +72,7 @@ def switch_screens():
         i = qtile.screens.index(qtile.currentScreen)
         group = qtile.screens[i - 1].group
         qtile.currentScreen.setGroup(group)
+
     return __inner
 
 
@@ -78,9 +83,9 @@ def set_floating(window):
     floating_names = ["Terminator Preferences"]
 
     if (window.window.get_wm_type() in floating_types
-        or window.window.get_wm_window_role() in floating_roles
-        or window.window.get_name() in floating_names
-        or window.window.get_wm_transient_for()):
+            or window.window.get_wm_window_role() in floating_roles
+            or window.window.get_name() in floating_names
+            or window.window.get_wm_transient_for()):
         window.floating = True
 
 
@@ -88,57 +93,59 @@ def init_keys():
     keys = [
         Key([mod], "p", lazy.screen.prev_group(skip_managed=True)),
         Key([mod], "n", lazy.screen.next_group(skip_managed=True)),
-
         Key([mod, "shift"], "Left", window_to_prev_group()),
         Key([mod, "shift"], "Right", window_to_next_group()),
-
         Key([mod, "mod1"], "Left", lazy.prev_screen()),
         Key([mod, "mod1"], "Right", lazy.next_screen()),
-
         Key([mod, "shift", "mod1"], "Left", window_to_prev_screen()),
         Key([mod, "shift", "mod1"], "Right", window_to_next_screen()),
-
         Key([mod], "t", switch_screens()),
-
         Key([mod], "l", lazy.group.next_window()),
         Key([mod], "h", lazy.group.prev_window()),
-
         Key([mod], "space", lazy.next_layout()),
-
         Key([mod], "j", lazy.layout.up()),
         Key([mod], "k", lazy.layout.down()),
-
         Key([mod], "f", lazy.window.toggle_floating()),
-
         Key([mod], "r", lazy.spawncmd()),
+        Key([mod, "mod1"], "l", lazy.spawn("i3lock")),
         Key([mod], "u", lazy.spawn(browser_chromium)),
         Key([mod], "x", lazy.spawn(browser_firefox)),
         Key([mod], "Return", lazy.spawn(terminal)),
         Key([mod], "BackSpace", lazy.window.kill()),
-
         Key([mod, "shift"], "r", lazy.restart()),
         Key([mod, "shift"], "q", lazy.shutdown()),
-
         Key([], "Print", lazy.spawn("scrot")),
-        Key([], "Scroll_Lock", lazy.spawn(HOME + ".local/bin/i3lock -d")),
+        # Key([], "Scroll_Lock", lazy.spawn(HOME + ".local/bin/i3lock -d")),
         Key([mod], "Delete", lazy.spawn("amixer set Master toggle")),
         Key([mod], "Prior", lazy.spawn("amixer set Master 5+")),
         Key([mod], "Next", lazy.spawn("amixer set Master 5-")),
-        Key([mod], "Insert", lazy.spawn(HOME + ".local/bin/spotify-dbus playpause")),
+        Key([mod], "Insert",
+            lazy.spawn(HOME + ".local/bin/spotify-dbus playpause")),
         Key([mod], "End", lazy.spawn(HOME + ".local/bin/spotify-dbus next")),
-        Key([mod], "Home", lazy.spawn(HOME + ".local/bin/spotify-dbus previous")),
+        Key([mod], "Home",
+            lazy.spawn(HOME + ".local/bin/spotify-dbus previous")),
     ]
     if DEBUG:
-        keys += [Key(["mod1"], "Tab", lazy.layout.next()),
-                 Key(["mod1", "shift"], "Tab", lazy.layout.previous())]
+        keys += [
+            Key(["mod1"], "Tab", lazy.layout.next()),
+            Key(["mod1", "shift"], "Tab", lazy.layout.previous())
+        ]
     return keys
 
 
 def init_mouse():
-    return [Drag([mod], "Button1", lazy.window.set_position_floating(),
-                 start=lazy.window.get_position()),
-            Drag([mod], "Button3", lazy.window.set_size_floating(),
-                 start=lazy.window.get_size())]
+    return [
+        Drag(
+            [mod],
+            "Button1",
+            lazy.window.set_position_floating(),
+            start=lazy.window.get_position()),
+        Drag(
+            [mod],
+            "Button3",
+            lazy.window.set_size_floating(),
+            start=lazy.window.get_size())
+    ]
 
 
 def init_groups():
@@ -152,11 +159,11 @@ def init_groups():
     groups += [("0", "10"), ("minus", "11"), ("equal", "12")]
     res_groups = [_inner(*i) for i in groups]
     res_groups += [
-        ScratchPad("scratchpad", [
-            DropDown("fish", "roxterm", opacity=0.8)
-        ])
+        ScratchPad("scratchpad",
+                   [DropDown("fish", "roxterm", height=0.6, opacity=0.6)])
     ]
-    keys.append(Key([], 'Pause', lazy.group['scratchpad'].dropdown_toggle('fish')))
+    keys.append(
+        Key([], 'Pause', lazy.group['scratchpad'].dropdown_toggle('fish')))
     return res_groups
 
 
@@ -167,33 +174,53 @@ def init_floating_layout():
 def init_widgets():
     prompt = "{0}@{1}: ".format(os.environ["USER"], hostname)
     widgets = [
-        Prompt(prompt=prompt, font="DejaVu Sans Mono", padding=10,
-               background=GREY),
-
-        TextBox(text="◤ ", fontsize=45, padding=-8, foreground=GREY,
-                background=DARK_GREY),
+        Prompt(
+            prompt=prompt,
+            font="DejaVu Sans Mono",
+            padding=10,
+            background=GREY),
+        TextBox(
+            text="◤ ",
+            fontsize=45,
+            padding=-8,
+            foreground=GREY,
+            background=DARK_GREY),
         CurrentLayoutIcon(scale=0.6, padding=-4),
-
         TextBox(text=" ", padding=2),
-        GroupBox(fontsize=8, padding=4, borderwidth=1, urgent_border=DARK_BLUE,
-                 disable_drag=True, highlight_method="block",
-                 this_screen_border=DARK_BLUE, other_screen_border=DARK_ORANGE,
-                 this_current_screen_border=BLUE,
-                 other_current_screen_border=ORANGE),
-
-        TextBox(text="◤", fontsize=45, padding=-1, foreground=DARK_GREY,
-                background=GREY),
-
-        TaskList(borderwidth=0, highlight_method="block", background=GREY,
-                 border=DARK_GREY, urgent_border=DARK_BLUE),
-
+        GroupBox(
+            fontsize=8,
+            padding=4,
+            borderwidth=1,
+            urgent_border=DARK_BLUE,
+            disable_drag=True,
+            highlight_method="block",
+            this_screen_border=DARK_BLUE,
+            other_screen_border=DARK_ORANGE,
+            this_current_screen_border=BLUE,
+            other_current_screen_border=ORANGE),
+        TextBox(
+            text="◤",
+            fontsize=45,
+            padding=-1,
+            foreground=DARK_GREY,
+            background=GREY),
+        TaskList(
+            borderwidth=0,
+            highlight_method="block",
+            background=GREY,
+            border=DARK_GREY,
+            urgent_border=DARK_BLUE),
         Systray(background=GREY),
-        TextBox(text="◤", fontsize=45, padding=-1,
-                foreground=GREY, background=DARK_GREY),
-
+        LaunchBar(progs=[('thunderbird', 'thunderbird',
+                          'launch thunderbird')]),
+        TextBox(
+            text="◤",
+            fontsize=45,
+            padding=-1,
+            foreground=GREY,
+            background=DARK_GREY),
         TextBox(text=" ⚠", foreground=BLUE, fontsize=18),
         Notify(),
-
         TextBox(text=" ⌚", foreground=BLUE, fontsize=18),
         Clock(format="%A %d-%m-%Y %H:%M")
     ]
@@ -224,8 +251,14 @@ def init_layouts(num_screens):
     margin = 0
     if num_screens > 1:
         margin = 8
-    layouts.extend([layout.Tile(ratio=0.5, margin=margin, border_width=1,
-                                border_normal="#111111", border_focus=BLUE)])
+    layouts.extend([
+        layout.Tile(
+            ratio=0.5,
+            margin=margin,
+            border_width=1,
+            border_normal="#111111",
+            border_focus=BLUE)
+    ])
 
 
 # very hacky, much ugly
@@ -285,8 +318,21 @@ if __name__ in ["config", "__main__"]:
 
     if DEBUG:
         layouts += [
-            floating_layout, layout.Stack(), layout.Zoomy(), layout.Matrix(),
-            layout.TreeTab(), layout.MonadTall(), layout.RatioTile(),
-            layout.Slice('left', 192, name='slice-test', role='gnome-terminal',
-                         fallback=layout.Slice('right', 256, role='gimp-dock',
-                                               fallback=layout.Stack(stacks=1)))]
+            floating_layout,
+            layout.Stack(),
+            layout.Zoomy(),
+            layout.Matrix(),
+            layout.TreeTab(),
+            layout.MonadTall(),
+            layout.RatioTile(),
+            layout.Slice(
+                'left',
+                192,
+                name='slice-test',
+                role='gnome-terminal',
+                fallback=layout.Slice(
+                    'right',
+                    256,
+                    role='gimp-dock',
+                    fallback=layout.Stack(stacks=1)))
+        ]
