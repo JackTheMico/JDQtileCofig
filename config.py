@@ -9,7 +9,7 @@ from libqtile.command import lazy
 from libqtile.config import Drag, Group, Key, Screen, ScratchPad, DropDown
 from libqtile.widget import (Battery, Clock, CurrentLayout, CurrentLayoutIcon,
                              GroupBox, Notify, Prompt, Sep, Systray, TaskList,
-                             TextBox, LaunchBar)
+                             TextBox, LaunchBar, Wallpaper)
 
 DEBUG = os.environ.get("DEBUG")
 HOME = os.path.expanduser("~") + "/"
@@ -113,8 +113,8 @@ def init_keys():
         Key([mod], "x", lazy.spawn(browser_firefox)),
         Key([mod], "Return", lazy.spawn(terminal)),
         Key([mod], "BackSpace", lazy.window.kill()),
-        Key([mod, "shift"], "r", lazy.restart()),
-        Key([mod, "shift"], "q", lazy.shutdown()),
+        Key([mod, "control"], "r", lazy.restart()),
+        Key([mod, "control"], "q", lazy.shutdown()),
         Key([], "Print", lazy.spawn("scrot")),
         # Key([], "Scroll_Lock", lazy.spawn(HOME + ".local/bin/i3lock -d")),
         Key([mod], "Delete", lazy.spawn("amixer set Master toggle")),
@@ -213,13 +213,20 @@ def init_widgets():
             urgent_border=DARK_BLUE),
         Systray(background=GREY),
         # LaunchBar needs some dependencies, use yaourt to install them
-        LaunchBar(progs=[(  # yaourt thunderbird virtualbox
-            'thunderbird', 'thunderbird', 'launch thunderbird'), (
-                'virtualbox', 'virtualbox',
-                'launch virtualbox'), ('thunar', 'thunar', 'launch thunar'), (
-                    'aria-ng',  # get this from github
-                    'firefox --new-tab ~/Downloads/aria-ng/index.html',
-                    'aria')]),
+        Wallpaper(
+            directory="/home/dlwxxxdlw/Pictures/wallpapers",
+            random_selection=True,
+            wallpaper_command=['feh', '--bg-max']),
+        LaunchBar(progs=[
+            (  # yaourt thunderbird virtualbox
+                'thunderbird', 'thunderbird', 'launch thunderbird'),
+            ('virtualbox', 'virtualbox', 'launch virtualbox'),
+            ('thunar', 'thunar', 'launch thunar'),
+            (
+                'aria-ng',  # get this from github
+                'firefox --new-tab ~/Downloads/aria-ng/index.html',
+                'aria')
+        ]),
         TextBox(
             text="◤",
             fontsize=45,
