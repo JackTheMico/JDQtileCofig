@@ -10,6 +10,7 @@ from libqtile.config import Drag, Group, Key, Screen, ScratchPad, DropDown
 from libqtile.widget import (Battery, Clock, CurrentLayout, CurrentLayoutIcon,
                              GroupBox, Notify, Prompt, Sep, Systray, TaskList,
                              TextBox, LaunchBar, Wallpaper)
+from libqtile.extension.dmenu import Dmenu
 
 DEBUG = os.environ.get("DEBUG")
 HOME = os.path.expanduser("~") + "/"
@@ -115,8 +116,13 @@ def init_keys():
         Key([mod], "BackSpace", lazy.window.kill()),
         Key([mod, "control"], "r", lazy.restart()),
         Key([mod, "control"], "q", lazy.shutdown()),
-        Key([], "Print", lazy.spawn("scrot")),
+        # region this "scrot" app can use -s to select an area of screen
+        # Key([], "Print", lazy.spawn("scrot")),
+        # Key([mod], "s", lazy.spawn("scrot -s '%Y-%m-%d_$wx$h.png' -e 'mv $f /home/dlwxxxdlw/Screenshots/'")),
+        # Key([mod, "control"], "s", lazy.spawn("scrot -s '/home/dlwxxxdlw/Screenshots/%Y-%m-%d_$wx$h.png'")),
+        # Key([mod], "s", lazy.spawn("scrot -e 'mv $f /home/dlwxxxdlw/Screenshots/'")),
         # Key([], "Scroll_Lock", lazy.spawn(HOME + ".local/bin/i3lock -d")),
+        # endregion
         Key([mod], "Delete", lazy.spawn("amixer set Master toggle")),
         Key([mod], "Prior", lazy.spawn("amixer set Master 5+")),
         Key([mod], "Next", lazy.spawn("amixer set Master 5-")),
@@ -161,7 +167,7 @@ def init_groups():
     res_groups = [_inner(*i) for i in groups]
     res_groups += [
         ScratchPad("scratchpad",
-                   [DropDown("fish", "roxterm", height=0.6, opacity=0.6)])
+                   [DropDown("fish", "roxterm", height=0.5, opacity=0.6)])
     ]
     keys.append(
         Key([], 'Pause', lazy.group['scratchpad'].dropdown_toggle('fish')))
@@ -212,20 +218,25 @@ def init_widgets():
             border=DARK_GREY,
             urgent_border=DARK_BLUE),
         Systray(background=GREY),
-        # LaunchBar needs some dependencies, use yaourt to install them
         Wallpaper(
             directory="/home/dlwxxxdlw/Pictures/wallpapers",
             random_selection=True,
-            wallpaper_command=['feh', '--bg-max']),
+            wallpaper_command=['feh', '--bg-max']
+        ),
+        # LaunchBar needs some dependencies, use yaourt to install them
         LaunchBar(progs=[
             (  # yaourt thunderbird virtualbox
                 'thunderbird', 'thunderbird', 'launch thunderbird'),
             ('virtualbox', 'virtualbox', 'launch virtualbox'),
             ('thunar', 'thunar', 'launch thunar'),
             (
-                'aria-ng',  # get this from github
+                'aria',  # get this from github
                 'firefox --new-tab ~/Downloads/aria-ng/index.html',
-                'aria')
+                'aria'),
+            ('shutter', 'shutter', 'launch shutter'),
+            ('ss', 'ss-qt5', 'launch shadowsocks-qt5'),
+            ('Tim', '/opt/deepinwine/apps/Deepin-TIM/run.sh', 'launch Tim'),
+            ('Thunder', '/opt/deepinwine/apps/Deepin-ThunderSpeed/run.sh', 'launch Thunder')
         ]),
         TextBox(
             text="◤",
@@ -310,6 +321,7 @@ def startup():
     execute_once("nm-applet")  # yaourt network manager applet
     execute_once("fcitx")  # yaourt fcitx
     execute_once("aria2c --conf-path=/home/dlwxxxdlw/.config/aria2/aria2.conf")
+    execute_once("source /home/dlwxxxdlw/.bashrc")
 
 
 if __name__ in ["config", "__main__"]:
@@ -335,6 +347,9 @@ if __name__ in ["config", "__main__"]:
     layouts = [layout.Max()]
     screens = [Screen(top=init_top_bar())]
     widget_defaults = init_widgets_defaults()
+    # region don't know how to use Dmenu
+    Dmenu(command=["shutdown", "reboot"], dmenu_font="DejaVu Sans Mono"),
+    # endregion
 
     if DEBUG:
         layouts += [
