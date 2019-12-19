@@ -10,7 +10,7 @@ from libqtile.config import Drag, Group, Key, Screen, ScratchPad, DropDown, Matc
 from libqtile.widget import (Battery, BatteryIcon, Clock, CurrentLayout, CurrentLayoutIcon,
                              GroupBox, Notify, Prompt, Sep, Systray, TaskList,
                              TextBox, LaunchBar, Wallpaper, Cmus, Pacman)
-from libqtile.extension.dmenu import DmenuRun
+# from libqtile.extension.dmenu import DmenuRun
 from libqtile.extension.window_list import WindowList
 from libqtile.extension import CommandSet
 
@@ -83,7 +83,7 @@ def switch_screens():
 def set_floating(window):
     floating_types = ["notification", "toolbar", "splash", "dialog"]
     floating_roles = ["EventDialog", "Msgcompose", "Preferences"]
-    floating_names = ["Terminator Preferences", "首选项", "设置", "qq"]
+    floating_names = ["Terminator Preferences", "首选项", "设置", "scrcpy"]
 
     def judgeby_names(window_name):
         for name in floating_names:
@@ -141,15 +141,17 @@ def init_keys():
         Key([mod], "x", lazy.window.kill()),
         Key([mod, "control"], "r", lazy.restart()),
         Key([mod, "control"], "q", lazy.shutdown()),
-        Key([mod, "shift"], 'r', lazy.run_extension(DmenuRun(
-            dmenu_prompt=">",
-            dmenu_font="DejaVu Sans Mono,14",
-            background="#15181a",
-            foreground="#00ff00",
-            selected_background="#079822",
-            selected_foreground="#fff",
-            # dmenu_height=24,  # Only supported by some dmenu forks
-        ))),
+        Key([mod, "shift"], "r", lazy.spawn(rofi_run)),
+        Key([mod, "shift"], "w", lazy.spawn(rofi_window)),
+        # Key([mod, "shift"], 'r', lazy.run_extension(DmenuRun(
+        #     dmenu_prompt=">",
+        #     dmenu_font="DejaVu Sans Mono,14",
+        #     background="#15181a",
+        #     foreground="#00ff00",
+        #     selected_background="#079822",
+        #     selected_foreground="#fff",
+        #     # dmenu_height=24,  # Only supported by some dmenu forks
+        # ))),
         Key([mod, "shift"], 'm', lazy.run_extension(CommandSet(
             commands={
                 'play': 'cmus-remote -p',
@@ -169,14 +171,14 @@ def init_keys():
                 '20up': 'cmus-remote -v +20%',
             }
         ))),
-        Key([mod, "shift"], 'w', lazy.run_extension(WindowList(
-            dmenu_prompt=">",
-            dmenu_font="DejaVu Sans Mono,14",
-            background="#15181a",
-            foreground="#00ff00",
-            selected_background="#079822",
-            selected_foreground="#fff",
-        ))),
+        # Key([mod, "shift"], 'w', lazy.run_extension(WindowList(
+        #     dmenu_prompt=">",
+        #     dmenu_font="DejaVu Sans Mono,14",
+        #     background="#15181a",
+        #     foreground="#00ff00",
+        #     selected_background="#079822",
+        #     selected_foreground="#fff",
+        # ))),
         # region this "scrot" app can use -s to select an area of screen
         # Key([], "Print", lazy.spawn("scrot")),
         # Key([mod], "s", lazy.spawn("scrot -s '%Y-%m-%d_$wx$h.png' -e 'mv $f /home/dlwxxxdlw/Screenshots/'")),
@@ -221,11 +223,14 @@ def init_groups():
         keys.append(Key([mod], key, lazy.group[name].toscreen()))
         keys.append(Key([mod, "shift"], key, lazy.window.togroup(name)))
         if key == "equal":
-            return Group(name, spawn="ss-qt5")
+            if not is_running("ss-qt5"):
+                return Group(name, spawn="ss-qt5")
         elif name == "01":
-            return Group(name, spawn="terminator")
+            if not is_running("terminator"):
+                return Group(name, spawn="terminator")
         elif name == "02":
-            return Group(name, spawn="chromium")
+            if not is_running("chromium"):
+                return Group(name, spawn="chromium")
         return Group(name)
 
     # groups = [("dead_grave", "00")]
@@ -421,7 +426,7 @@ def startup():
     """
     # execute_once("nm-applet")  # yaourt network manager applet
     execute_once("fcitx &")  # yaourt fcitx
-    execute_once("nohup albert > /dev/null 2>albert.log &")
+    # execute_once("nohup albert > /dev/null 2>albert.log &")
     # execute_once("ss-qt5")
     # execute_once("aria2c --conf-path=/home/dlwxxxdlw/.config/aria2/aria2.conf")
     # execute_once("source /home/dlwxxxdlw/.bashrc")
@@ -440,6 +445,8 @@ if __name__ in ["config", "__main__"]:
     terminal = "terminator"  # yaourt roxterm
     package_manager = "octopi"
     file_manager = "nautilus"
+    rofi_run = "rofi -show run"
+    rofi_window = "rofi -show window"
     hostname = socket.gethostname()
     # follow_mouse_focus = True # not sure what this means
     # never set "cursor_warp" True ,it will make your mouse
