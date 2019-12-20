@@ -426,6 +426,8 @@ def startup():
     """
     # execute_once("nm-applet")  # yaourt network manager applet
     execute_once("fcitx &")  # yaourt fcitx
+    execute_once("ss-local -c ~/.config/shadowsocks/bandwagong.json start")
+    execute_once("privoxy /home/dlwxxxdlw/.config/privoxy/config")
     # execute_once("nohup albert > /dev/null 2>albert.log &")
     # execute_once("ss-qt5")
     # execute_once("aria2c --conf-path=/home/dlwxxxdlw/.config/aria2/aria2.conf")
