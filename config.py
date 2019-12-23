@@ -400,6 +400,9 @@ def main(qtile):
 
 
 def is_running(process):
+    if "nohup" in process:
+        index = process.index(">")
+        process = process[6:index]
     s = subprocess.Popen(["ps", "axuw"], stdout=subprocess.PIPE)
     for x in s.stdout:
         if re.search(process, x.decode()):
@@ -426,7 +429,7 @@ def startup():
     """
     # execute_once("nm-applet")  # yaourt network manager applet
     execute_once("fcitx &")  # yaourt fcitx
-    execute_once("ss-local -c ~/.config/shadowsocks/bandwagong.json start")
+    execute_once("nohup ss-local -c /home/dlwxxxdlw/.config/shadowsocks/bandwagong.json start > /dev/null 2>ss-local.log &")
     execute_once("privoxy /home/dlwxxxdlw/.config/privoxy/config")
     # execute_once("nohup albert > /dev/null 2>albert.log &")
     # execute_once("ss-qt5")
