@@ -9,7 +9,7 @@ from libqtile.command import lazy
 from libqtile.config import Drag, Group, Key, Screen, ScratchPad, DropDown, Match
 from libqtile.widget import (Battery, BatteryIcon, Clock, CurrentLayout, CurrentLayoutIcon,
                              GroupBox, Notify, Prompt, Sep, Systray, TaskList,
-                             TextBox, LaunchBar, Wallpaper, Cmus, Pacman)
+                             TextBox, LaunchBar, Wallpaper, Cmus, Pacman, ImapWidget)
 # from libqtile.extension.dmenu import DmenuRun
 from libqtile.extension.window_list import WindowList
 from libqtile.extension import CommandSet
@@ -296,6 +296,13 @@ def init_widgets():
         Cmus(
             fontsize=13,
             font="DejaVu Sans Mono for Powerline Bold",
+        ),
+        ImapWidget(
+            server="imap.si-tech.com.cn",
+            font="DejaVu Sans Mono for Powerline Bold",
+            fontsize=13,
+            update_interval=360,
+            user="denglw@si-tech.com.cn"
         ),
         Pacman(
             fontsize=13,
