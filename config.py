@@ -9,7 +9,9 @@ from libqtile.command import lazy
 from libqtile.config import Drag, Group, Key, Screen, ScratchPad, DropDown, Match
 from libqtile.widget import (Battery, BatteryIcon, Clock, CurrentLayout, CurrentLayoutIcon,
                              GroupBox, Notify, Prompt, Sep, Systray, TaskList,
-                             TextBox, LaunchBar, Wallpaper, Cmus, Pacman, ImapWidget)
+                             TextBox, LaunchBar, Wallpaper, Cmus, Pacman, 
+                             # ImapWidget
+                             )
 # from libqtile.extension.dmenu import DmenuRun
 from libqtile.extension.window_list import WindowList
 from libqtile.extension import CommandSet
@@ -136,8 +138,8 @@ def init_keys():
         Key([mod],"BackSpace", lazy.spawn("i3lock -i /home/dlwxxxdlw/Pictures/wallpapers/2.png")),
         Key([mod], "u", lazy.spawn(browser_chromium)),
         # Key([mod], "x", lazy.spawn(browser_firefox)),
-        Key([mod], "p", lazy.spawn(package_manager)),
-        Key([mod], "n", lazy.spawn(file_manager)),
+        Key([mod], "m", lazy.spawn(package_manager)),
+        Key([mod], "b", lazy.spawn(file_manager)),
         Key([mod], "x", lazy.window.kill()),
         Key([mod, "control"], "r", lazy.restart()),
         Key([mod, "control"], "q", lazy.shutdown()),
@@ -182,8 +184,8 @@ def init_keys():
         # region this "scrot" app can use -s to select an area of screen
         # Key([], "Print", lazy.spawn("scrot")),
         # Key([mod], "s", lazy.spawn("scrot -s '%Y-%m-%d_$wx$h.png' -e 'mv $f /home/dlwxxxdlw/Screenshots/'")),
-        # Key([mod, "control"], "s", lazy.spawn("scrot -s '/home/dlwxxxdlw/Screenshots/%Y-%m-%d_$wx$h.png'")),
-        # Key([mod], "s", lazy.spawn("scrot -e 'mv $f /home/dlwxxxdlw/Screenshots/'")),
+        Key([mod, "control"], "s", lazy.spawn("scrot -s '/mnt/d/Jack\ Deng/Documents/org/screenshots/%Y-%m-%d_$wx$h.png'")),
+        Key([mod], "s", lazy.spawn("scrot '/mnt/d/Jack\ Deng/Documents/org/screenshots/%Y-%m-%d_$wx$h.png'")),
         # Key([], "Scroll_Lock", lazy.spawn(HOME + ".local/bin/i3lock -d")),
         # endregion
         # Key([mod], "Delete", lazy.spawn("amixer set Master toggle")),
@@ -229,8 +231,11 @@ def init_groups():
             if not is_running("terminator"):
                 return Group(name, spawn="terminator")
         elif name == "02":
-            if not is_running("chromium"):
-                return Group(name, spawn="chromium")
+            if not is_running("emacs"):
+                return Group(name, spawn="emacs")
+        # elif name == "03":
+        #     if not is_running("evolution"):
+        #         return Group(name, spawn="evolution")
         return Group(name)
 
     # groups = [("dead_grave", "00")]
@@ -242,7 +247,7 @@ def init_groups():
                    [DropDown("scratch", "kitty", height=0.65, opacity=0.45)])
     ]
     keys.append(
-        Key([mod], 's', lazy.group['scratchpad'].dropdown_toggle('scratch')))
+        Key([mod], "d", lazy.group["scratchpad"].dropdown_toggle("scratch")))
     return res_groups
 
 
@@ -297,13 +302,13 @@ def init_widgets():
             fontsize=13,
             font="DejaVu Sans Mono for Powerline Bold",
         ),
-        ImapWidget(
-            server="imap.si-tech.com.cn",
-            font="DejaVu Sans Mono for Powerline Bold",
-            fontsize=13,
-            update_interval=360,
-            user="denglw@si-tech.com.cn"
-        ),
+        # ImapWidget(
+        #     server="imap.si-tech.com.cn",
+        #     font="DejaVu Sans Mono for Powerline Bold",
+        #     fontsize=13,
+        #     update_interval=360,
+        #     user="denglw@si-tech.com.cn"
+        # ),
         Pacman(
             fontsize=13,
             font="DejaVu Sans Mono for Powerline Bold",
@@ -436,7 +441,8 @@ def startup():
     """
     # execute_once("nm-applet")  # yaourt network manager applet
     execute_once("fcitx &")  # yaourt fcitx
-    execute_once("nohup ss-local -c /home/dlwxxxdlw/.config/shadowsocks/bandwagong.json start > /dev/null 2>ss-local.log &")
+    # execute_once("nohup ss-local -c /home/dlwxxxdlw/.config/shadowsocks/bandwagong.json start > /dev/null 2>ss-local.log &")
+    execute_once("nohup ss-local -c /home/dlwxxxdlw/.config/shadowsocks/config.json start > /dev/null 2>ss-local.log &")
     execute_once("privoxy /home/dlwxxxdlw/.config/privoxy/config")
     # execute_once("nohup albert > /dev/null 2>albert.log &")
     # execute_once("ss-qt5")
