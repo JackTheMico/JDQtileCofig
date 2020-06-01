@@ -233,9 +233,9 @@ def init_groups():
         elif name == "02":
             if not is_running("emacs"):
                 return Group(name, spawn="emacs")
-        elif name == "03":
-            if not is_running("evolution"):
-                return Group(name, spawn="evolution")
+        # elif name == "03":
+        #     if not is_running("evolution"):
+        #         return Group(name, spawn="evolution")
         return Group(name)
 
     # groups = [("dead_grave", "00")]
