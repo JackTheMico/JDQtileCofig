@@ -224,10 +224,7 @@ def init_groups():
     def _inner(key, name):
         keys.append(Key([mod], key, lazy.group[name].toscreen()))
         keys.append(Key([mod, "control"], key, lazy.window.togroup(name)))
-        if key == "equal":
-            if not is_running("ss-qt5"):
-                return Group(name, spawn="ss-qt5")
-        elif name == "01":
+        if name == "01":
             if not is_running("terminator"):
                 return Group(name, spawn="terminator")
         elif name == "02":
@@ -236,6 +233,9 @@ def init_groups():
         # elif name == "03":
         #     if not is_running("evolution"):
         #         return Group(name, spawn="evolution")
+        elif name == "04":
+            if not is_running("trojan-qt5"):
+                return Group(name, spawn="trojan-qt5")
         return Group(name)
 
     # groups = [("dead_grave", "00")]
