@@ -109,7 +109,7 @@ def init_keys():
         # Key([mod, "mod1"], "Right", lazy.next_screen()),
         # Key([mod, "shift", "mod1"], "Left", window_to_prev_screen()),
         # Key([mod, "shift", "mod1"], "Right", window_to_next_screen()),
-        Key([mod, "shift"], "t", switch_screens()),
+        # Key([mod, "shift"], "t", switch_screens()),
         # Key([mod, "shift"], "l", lazy.group.next_window()),
         # Key([mod, "shift"], "h", lazy.group.prev_window()),
         Key([mod], "space", lazy.next_layout()),
@@ -127,9 +127,9 @@ def init_keys():
         Key([mod, "control"], "k", lazy.layout.grow_up()),
         Key([mod, "control"], "h", lazy.layout.grow_left()),
         Key([mod, "control"], "l", lazy.layout.grow_right()),
-        Key([mod, "shift"], "n", lazy.layout.normalize()),
+        Key([mod, "control"], "n", lazy.layout.normalize()),
         Key([mod], "o", lazy.layout.maximize()),
-        Key([mod, "shift"], "space", lazy.layout.flip()),
+        # Key([mod, "shift"], "space", lazy.layout.flip()),
         Key([mod], "Return", lazy.layout.toggle_split()),
         # Key([mod], "Return", lazy.spawn(terminal)),
         Key([mod], "f", lazy.window.toggle_floating()),
@@ -143,8 +143,8 @@ def init_keys():
         Key([mod], "x", lazy.window.kill()),
         Key([mod, "control"], "r", lazy.restart()),
         Key([mod, "control"], "q", lazy.shutdown()),
-        Key([mod, "shift"], "r", lazy.spawn(rofi_run)),
-        Key([mod, "shift"], "w", lazy.spawn(rofi_window)),
+        Key([mod, "control"], "c", lazy.spawn(rofi_run)),
+        Key([mod, "control"], "w", lazy.spawn(rofi_window)),
         # Key([mod, "shift"], 'r', lazy.run_extension(DmenuRun(
         #     dmenu_prompt=">",
         #     dmenu_font="DejaVu Sans Mono,14",
@@ -154,7 +154,7 @@ def init_keys():
         #     selected_foreground="#fff",
         #     # dmenu_height=24,  # Only supported by some dmenu forks
         # ))),
-        Key([mod, "shift"], 'm', lazy.run_extension(CommandSet(
+        Key([mod, "control"], 'm', lazy.run_extension(CommandSet(
             commands={
                 'play': 'cmus-remote -p',
                 'pause': 'cmus-remote -u',
@@ -184,7 +184,7 @@ def init_keys():
         # region this "scrot" app can use -s to select an area of screen
         # Key([], "Print", lazy.spawn("scrot")),
         # Key([mod], "s", lazy.spawn("scrot -s '%Y-%m-%d_$wx$h.png' -e 'mv $f /home/dlwxxxdlw/Screenshots/'")),
-        Key([mod, "control"], "s", lazy.spawn("scrot -s '/mnt/d/Jack\ Deng/Documents/org/screenshots/%Y-%m-%d_$wx$h.png'")),
+        # Key([mod, "control"], "s", lazy.spawn("scrot -s '/mnt/d/Jack\ Deng/Documents/org/screenshots/%Y-%m-%d_$wx$h.png'")),
         Key([mod], "s", lazy.spawn("scrot '/mnt/d/Jack\ Deng/Documents/org/screenshots/%Y-%m-%d_$wx$h.png'")),
         # Key([], "Scroll_Lock", lazy.spawn(HOME + ".local/bin/i3lock -d")),
         # endregion
@@ -223,7 +223,7 @@ def init_mouse():
 def init_groups():
     def _inner(key, name):
         keys.append(Key([mod], key, lazy.group[name].toscreen()))
-        keys.append(Key([mod, "shift"], key, lazy.window.togroup(name)))
+        keys.append(Key([mod, "control"], key, lazy.window.togroup(name)))
         if key == "equal":
             if not is_running("ss-qt5"):
                 return Group(name, spawn="ss-qt5")
@@ -455,8 +455,8 @@ if __name__ in ["config", "__main__"]:
     if HOME + ".local/bin" not in os.environ["PATH"]:
         os.environ["PATH"] = HOME + ".local/bin:{}".format(os.environ["PATH"])
 
-    # mod = "mod4"
-    mod = "mod1"
+    mod = "mod3"
+    # mod = "mod1"
     browser_chromium = "chromium"  # yaourt chromium
     browser_firefox = "firefox"  # yaourt firefox
     # terminal = "roxterm"  # yaourt roxterm
