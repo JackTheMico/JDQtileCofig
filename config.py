@@ -225,15 +225,15 @@ def init_groups():
         keys.append(Key([mod], key, lazy.group[name].toscreen()))
         keys.append(Key([mod, "control"], key, lazy.window.togroup(name)))
         if name == "01":
-            if not is_running("terminator"):
-                return Group(name, spawn="terminator")
+            if not is_running("kitty"):
+                return Group(name, spawn="kitty")
         elif name == "02":
             if not is_running("emacs"):
                 return Group(name, spawn="emacs")
-        # elif name == "03":
-        #     if not is_running("evolution"):
-        #         return Group(name, spawn="evolution")
-        elif name == "04":
+        elif name == "03":
+            if not is_running("chromium"):
+                return Group(name, spawn="chromium")
+        elif name == "12":
             if not is_running("trojan-qt5"):
                 return Group(name, spawn="trojan-qt5")
         return Group(name)
@@ -244,7 +244,7 @@ def init_groups():
     res_groups = [_inner(*i) for i in groups]
     res_groups += [
         ScratchPad("scratchpad",
-                   [DropDown("scratch", "kitty", height=0.65, opacity=0.45)])
+                   [DropDown("scratch", "kitty", height=0.55, opacity=0.35)])
     ]
     keys.append(
         Key([mod], "d", lazy.group["scratchpad"].dropdown_toggle("scratch")))
@@ -460,7 +460,7 @@ if __name__ in ["config", "__main__"]:
     browser_chromium = "chromium"  # yaourt chromium
     browser_firefox = "firefox"  # yaourt firefox
     # terminal = "roxterm"  # yaourt roxterm
-    terminal = "terminator"  # yaourt roxterm
+    terminal = "kitty"  # yaourt roxterm
     package_manager = "octopi"
     file_manager = "nautilus"
     rofi_run = "rofi -show run"
