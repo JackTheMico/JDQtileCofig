@@ -233,6 +233,9 @@ def init_groups():
         elif name == "03":
             if not is_running("chromium"):
                 return Group(name, spawn="chromium")
+        elif name == "11":
+            if not is_running("switchhosts"):
+                return Group(name, spawn="switchhosts")
         elif name == "12":
             if not is_running("trojan-qt5"):
                 return Group(name, spawn="trojan-qt5")
