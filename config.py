@@ -154,23 +154,37 @@ def init_keys():
         #     selected_foreground="#fff",
         #     # dmenu_height=24,  # Only supported by some dmenu forks
         # ))),
-        Key([mod, "control"], 'm', lazy.run_extension(CommandSet(
+        # Key([mod, "control"], 'm', lazy.run_extension(CommandSet(
+        #     commands={
+        #         'play': 'cmus-remote -p',
+        #         'pause': 'cmus-remote -u',
+        #         'stop': 'cmus-remote -s',
+        #         'prev': 'cmus-remote -r',
+        #         'next': 'cmus-remote -n',
+        #         'repeat': 'cmus-remote -R',
+        #         'shuffle': 'cmus-remote -S',
+        #         '5up': 'cmus-remote -v +5%',
+        #         '5down': 'cmus-remote -v -5%',
+        #         '10down': 'cmus-remote -v -10%',
+        #         '10up': 'cmus-remote -v +10%',
+        #         '15up': 'cmus-remote -v +15%',
+        #         '15down': 'cmus-remote -v -15%',
+        #         '20down': 'cmus-remote -v -20%',
+        #         '20up': 'cmus-remote -v +20%',
+        #     }
+        # ))),
+        Key([mod, "control"], 'p', lazy.run_extension(CommandSet(
             commands={
-                'play': 'cmus-remote -p',
-                'pause': 'cmus-remote -u',
-                'stop': 'cmus-remote -s',
-                'prev': 'cmus-remote -r',
-                'next': 'cmus-remote -n',
-                'repeat': 'cmus-remote -R',
-                'shuffle': 'cmus-remote -S',
-                '5up': 'cmus-remote -v +5%',
-                '5down': 'cmus-remote -v -5%',
-                '10down': 'cmus-remote -v -10%',
-                '10up': 'cmus-remote -v +10%',
-                '15up': 'cmus-remote -v +15%',
-                '15down': 'cmus-remote -v -15%',
-                '20down': 'cmus-remote -v -20%',
-                '20up': 'cmus-remote -v +20%',
+                'shutdown': 'ps aux|grep "picom"|grep -v grep|awk "{print $2}"|xargs kill -9',
+                '90': 'picom -bc --active-opacity 0.9',
+                '85': 'picom -bc --active-opacity 0.85',
+                '80': 'picom -bc --active-opacity 0.8',
+                '75': 'picom -bc --active-opacity 0.75',
+                '70': 'picom -bc --active-opacity 0.7',
+                '65': 'picom -bc --active-opacity 0.65',
+                '60': 'picom -bc --active-opacity 0.6',
+                '55': 'picom -bc --active-opacity 0.55',
+                '50': 'picom -bc --active-opacity 0.5',
             }
         ))),
         # Key([mod, "shift"], 'w', lazy.run_extension(WindowList(
