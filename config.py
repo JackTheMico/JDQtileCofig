@@ -458,6 +458,7 @@ def startup():
     """
     # execute_once("nm-applet")  # yaourt network manager applet
     execute_once("fcitx &")  # yaourt fcitx
+    execute_once("picom -bc --active-opacity 0.85")
     # execute_once("nohup ss-local -c /home/dlwxxxdlw/.config/shadowsocks/bandwagong.json start > /dev/null 2>ss-local.log &")
     # execute_once("nohup ss-local -c /home/dlwxxxdlw/.config/shadowsocks/config.json start > /dev/null 2>ss-local.log &")
     # execute_once("privoxy /home/dlwxxxdlw/.config/privoxy/config")
