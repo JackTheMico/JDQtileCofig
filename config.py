@@ -225,8 +225,8 @@ def init_groups():
         keys.append(Key([mod], key, lazy.group[name].toscreen()))
         keys.append(Key([mod, "control"], key, lazy.window.togroup(name)))
         if name == "01":
-            if not is_running("kitty"):
-                return Group(name, spawn="kitty")
+            if not is_running("alacritty"):
+                return Group(name, spawn="alacritty")
         elif name == "02":
             if not is_running("emacs"):
                 return Group(name, spawn="emacs")
@@ -247,7 +247,7 @@ def init_groups():
     res_groups = [_inner(*i) for i in groups]
     res_groups += [
         ScratchPad("scratchpad",
-                   [DropDown("scratch", "kitty", height=0.55, opacity=0.35)])
+                   [DropDown("scratch", "alacritty", height=0.55, opacity=0.35)])
     ]
     keys.append(
         Key([mod], "d", lazy.group["scratchpad"].dropdown_toggle("scratch")))
@@ -463,7 +463,7 @@ if __name__ in ["config", "__main__"]:
     browser_chromium = "chromium"  # yaourt chromium
     browser_firefox = "firefox"  # yaourt firefox
     # terminal = "roxterm"  # yaourt roxterm
-    terminal = "kitty"  # yaourt roxterm
+    terminal = "alacritty"  # yaourt roxterm
     package_manager = "octopi"
     file_manager = "nautilus"
     rofi_run = "rofi -show run"
