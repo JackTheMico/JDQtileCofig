@@ -244,15 +244,18 @@ def init_groups():
         elif name == "02":
             if not is_running("emacs"):
                 return Group(name, spawn="emacs")
-        elif name == "03":
-            if not is_running("chromium"):
-                return Group(name, spawn="chromium")
-        elif name == "11":
-            if not is_running("switchhosts"):
-                return Group(name, spawn="switchhosts")
         elif name == "12":
-            if not is_running("trojan-qt5"):
-                return Group(name, spawn="trojan-qt5")
+            if not is_running("clashy"):
+                return Group(name, spawn="clashy")
+        # elif name == "03":
+        #     if not is_running("chromium"):
+        #         return Group(name, spawn="chromium")
+        # elif name == "12":
+        #     if not is_running("switchhosts"):
+        #         return Group(name, spawn="switchhosts")
+        # elif name == "12":
+        #     if not is_running("trojan-qt5"):
+        #         return Group(name, spawn="trojan-qt5")
         return Group(name)
 
     # groups = [("dead_grave", "00")]
@@ -326,10 +329,10 @@ def init_widgets():
         #     update_interval=360,
         #     user="denglw@si-tech.com.cn"
         # ),
-        Pacman(
-            fontsize=13,
-            font="DejaVu Sans Mono for Powerline Bold",
-        ),
+        # Pacman(
+        #     fontsize=13,
+        #     font="DejaVu Sans Mono for Powerline Bold",
+        # ),
         Systray(background=DARK_ORANGE),
         Wallpaper(
             directory="/home/dlwxxxdlw/Pictures/wallpapers",
@@ -457,8 +460,9 @@ def startup():
     :return: None
     """
     # execute_once("nm-applet")  # yaourt network manager applet
-    execute_once("fcitx &")  # yaourt fcitx
-    execute_once("picom -bc --active-opacity 0.85")
+    # execute_once("fcitx &")  # yaourt fcitx
+    execute_once("picom -bc --active-opacity 0.8")
+    # execute_once("nohup clash >> /dev/null &")
     # execute_once("nohup ss-local -c /home/dlwxxxdlw/.config/shadowsocks/bandwagong.json start > /dev/null 2>ss-local.log &")
     # execute_once("nohup ss-local -c /home/dlwxxxdlw/.config/shadowsocks/config.json start > /dev/null 2>ss-local.log &")
     # execute_once("privoxy /home/dlwxxxdlw/.config/privoxy/config")
